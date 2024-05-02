@@ -1,21 +1,26 @@
-<h1>Stably Training Complcated DQN Model</h1>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<h2>Background and Related Work</h2>
-<p>DQN is the model that utilize deep learning architecture to predict Q value for every actions from the agent. </p>
+<h1>Stably Training Complicated DQN Model</h1>
+
+<h2>Background</h2>
+<p>DQN is the model that utilizes deep learning architecture to predict the Q value for every action taken by the agent. The Q-value function in the DQN algorithm can be represented as:
+\begin{equation*}
+Q(s_t, a_t) \approx r_{t+1} + \gamma \max_{a_{t+1}} Q(s_{t+1}, a_{t+1})
+\end{equation*}
+One of the main problems of the DQN algorithm is that it is hard to converge, and one main reason is that in the DQN loss function, both target Q-values and predicted Q-values contain Q function. In deep learning, the training process can be unstable when the target value is also a function. The target and predicted Q-values are correlated, making it hard for the network to converge. One method to solve the problem is using a separate target network with some delay. Slowing down one network can improve the stability of the whole training process. <a href="#ref-asadi2023faster">[1]</a> In some simpler versions, people update the target network every N step, which can also help slow down the target network and support convergence. </p>
+
 
 <h2>Methodology</h2>
+<p>In this project, I try to train a relatively complicated deep learning based on the U-ViT model. In the Joint-Embedding Predictive Architecture (JEPA) model, the same problem exists: both predicted values and target values are from the same model as a function.<a href="#ref-assran2023selfsupervised">[2]</a> I try to deploy the hypermeters from the training process in the JEPA model to help the DQN training process converge. On the other hand, I add memory as another input to the model to solve the problem of the input state's lack of information. </p>
+<h4>Hyperparameter</h4>
 <p>aaaaa</p>
 
-<h3>Environment</h3>
+<h3>Memory</h3>
 <p>aaaaa</p>
 
 <h3>Agent</h3>
 <p>aaaaa</p>
-
-<h3>Reward Function</h3>
-<p>aaaaa</p>
-
-<h3>Training Algorithm</h3>
 <p>aaaaa</p>
 
 <h2>Experiments</h2>
@@ -36,5 +41,24 @@
 <h2>Conclusion and Future Work</h2>
 <p>aaaaa</p>
 
+
 <h2>References</h2>
-<p>aaaaa</p>
+<p>
+    <div id="ref-asadi2023faster">
+        <span>[1]</span>
+        <span>Kavosh Asadi, Rasool Fakoor, Omer Gottesman, Taesup Kim, Michael L. Littman, and Alexander J. Smola, "Faster Deep Reinforcement Learning with Slower Online Network," <i>arXiv preprint arXiv:2112.05848</i>, 2023.</span>
+    </div>
+
+	<div id="ref-assran2023selfsupervised">
+    	<span>[2]</span>
+    	<span>Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr Bojanowski, Pascal Vincent, Michael Rabbat, Yann LeCun, and Nicolas Ballas, "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture," <i>arXiv preprint arXiv:2301.08243</i>, 2023.</span>
+	</div>
+</p>
+
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+    };
+</script>
