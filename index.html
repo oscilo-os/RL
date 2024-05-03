@@ -61,7 +61,7 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 
 
 <h2>Experiments</h2>
-<p>I trained the model on the CarRacing-V2 environment from OpenAI Gym in the experiment.  The model is in discrete mode, and the action space size is 5. The input state is a 96*96 image with 3 channels. The U-Vit model has 5 layers, as shown in the image, the patch size is 8*8, and the width is 64. The buffer size is 10240, and the model is trained every 1024 steps. The epsilon parameter for the randomness linearly decreases from 1 to 0.1 in the first 2000 training steps and linearly decreases from 0.1 to 0.01 in the next 2000 training steps. One training step means 1024 steps, and the model is trained once. In each training step, the model is trained 3 epochs, and the gamma in DQN loss is 0.99.</p>
+<p>I trained the model on the CarRacing-V2 environment from OpenAI Gym in the experiment.  The model is in discrete mode, and the action space size is 5. The input state is a 96*96 image with 3 channels. The U-Vit model has 5 layers, as shown in the image, the patch size is 8*8, and the width is 64. The buffer size is 10240, and the model is trained every 1024 steps. The epsilon parameter for the randomness linearly decreases from 1 to 0.1 in the first 2000 training steps and linearly decreases from 0.1 to 0.01 in the next 2000 training steps. One training step means 1024 steps, and the model is trained once. In each training step, the model is trained in 3 epochs, and the gamma in DQN loss is 0.99.</p>
 
 
 <h2>Results</h2>
@@ -75,11 +75,13 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 </div>
 
 <h2>Discussion</h2>
-<p>In the experiment, the model successfully learned the game rule and followed the track in validation. In my test, the convergence is hard without using the hyperparameters mentioned in the paper. Using batch sizes like 32, the model may be unable to learn the environment. The memory parameter also helps the model avoid sticking in the spinning. With memory, the model can avoid being stuck in the spinning, and the learning curve is smoother and more stable. In my testing, when using other hyperparameters, it is hard to observe continuous loss decrease during 3 epochs of each training step. The research on JEPA model provides a simple way to set the hyperparameters in DQN. </p>
+<p>In the experiment, the model successfully learned the game rule and followed the track in validation. In my test, the convergence is hard without using the hyperparameters mentioned in the paper. Using batch sizes like 32, the model may be unable to learn the environment. The memory parameter also helps the model avoid sticking in the spinning. With memory, the model can avoid being stuck in the spinning, and the learning curve is smoother and more stable. In my testing, when using other hyperparameters, it is hard to observe continuous loss decrease during 3 epochs of each training step. The research on the JEPA model provides a simple way to set the hyperparameters in DQN. </p>
 
-<h2>Conclusion and Future Work</h2>
-<p></p>
+<h2>Conclusion</h2>
+<p>This project successfully trained a complicated deep reinforcement learning model based on the U-ViT architecture to play the CarRacing-V2 environment in OpenAI Gym. The key aspects that enabled stable training were using a separate target network with exponential moving average updates, incorporating a memory component, and adopting hyperparameters from the JEPA model. Overall, using techniques from self-supervised learning can help train the DQN network.</p>
 
+<h2>Future Work</h2>
+<p>This research tests the training method on a relatively complicated deep learning network, and the effectiveness on larger models like ViT-Base needs further research. This project introduces one method to record and pass memory between each step, and some more complicated memory architectures, like those applied in LSTM, can be tested in the future. Researches on self-supervised learning provide some useful methods for training a model that can also be used on other supervised model. </p>
 
 <h2>References</h2>
 <p>
