@@ -1,5 +1,19 @@
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<style>
+	.image-container {
+		justify-content: start;
+	}
+
+
+	</style>
+</head>
 
 <h1>Stably Training Complicated DQN Model</h1>
 
@@ -12,31 +26,52 @@ One of the main problems of the DQN algorithm is that it is hard to converge, an
 
 
 <h2>Methodology</h2>
-<p>In this project, I try to train a relatively complicated deep learning based on the U-ViT model. In the Joint-Embedding Predictive Architecture (JEPA) model, the same problem exists: both predicted values and target values are from the same model as a function.<a href="#ref-assran2023selfsupervised">[2]</a> I try to deploy the hypermeters from the training process in the JEPA model to help the DQN training process converge. On the other hand, I add memory as another input to the model to solve the problem of the input state's lack of information. </p>
+<p>In this project, I try to train a relatively complicated deep learning based on the U-ViT model.<a href="#ref-bao2023worth">[2]</a> In the Joint-Embedding Predictive Architecture (JEPA) model, the same problem exists: predicted and target values are from the model as a function. <a href="#ref-assran2023selfsupervised">[3]</a> I try to deploy the hypermeters from the training process in the JEPA model to help the DQN training process converge. On the other hand, I add memory as another input to the model to solve the problem of the input state's lack of information. </p>
+<h4>Model</h4>
+I use the U-ViT model as the network architecture to predict the Q values.<a href="#ref-bao2023worth">[2]</a> This is the model used in the diffusion model and is a generative model based on ViT. This model can be used to generate the Q value from the state in the form of image. 
+<body>
+    <!-- Container for the images -->
+    <div class="image-container">
+        <!-- First image -->
+        <div>
+            <img src="resource/uvit.png" alt="Uvit" width="30%">
+            <p>Image 1: The U-ViT architecture from the original paper.</p>
+        </div>
+
+		<div>
+            <img src="resource/model.png" alt="model" width="50%">
+            <p>Image 2: The architecture used in the project</p>
+        </div>
+    </div>
+</body>
+
+<h4>Memory</h4>
+<p>In this project, I added a memory parameter to the model that works similarly to the memory in the GRU model. The memory is a vector with the same length as the width of each patch. The memory is reset to all zero values when resetting the environment. After patch embedding and before transformer blocks, the memory is concatenated to the features and goes through transformer blocks with other features. After the transformer blocks and before the fc layers, the memory is separated from the model and outputted directly. At the same time, the reset features go through the FC layers and generate Q values. The primary goal of using memory is to solve the problem of the learning process being stuck in the first corner of the car racing environment, and the car continuing to spin during the training process. The spinning can also happen in other corners because the state does not provide the correct direction of the route. The problem can be that the input is only the image and lacks more information, like the car's speed and whether the learning process is stuck. When the vehicle is off the track or even the direction is not perfectly following the track, like the situation in which the car is perpendicular to the track, the memory can help the model understand the correct direction and other information that is not provided in the state parameter. This can help the model mainly in training to avoid getting stuck.</p>
+
+<div>
+	<img src="resource/train_arch.png" alt="train_arch" width="30%">
+	<p>Image 3: The architecture of the training process.</p>
+</div>
+	
+<h4>Moving Average Updating</h4>
+<p>Using a moving average to update the target network started from the teacher-student self-supervised model. Using the moving average can be smoother than updating the target network every N step, and convergence speed can be faster. </p>
+	
 <h4>Hyperparameter</h4>
-<p>aaaaa</p>
+<p>The model uses the hyperparameters from the JEPA model. The batch size is 2048, and the optimizer is AdamW. The learning rate is 10^-4, and the weight decay is 0.04. The target network is updated using EMA with a momentum of 0.996. All these parameters are from the JEPA model. The idea is that to stabilize the learning process, the model needs a large batch size and weight decay. </p>
 
-<h3>Memory</h3>
-<p>aaaaa</p>
-
-<h3>Agent</h3>
-<p>aaaaa</p>
-<p>aaaaa</p>
 
 <h2>Experiments</h2>
-<p>aaaaa</p>
+<p>I trained the model on the CarRacing-V2 environment from OpenAI Gym in the experiment.  The model is in discrete mode, and the action space size is 5. The input state is a 96*96 image with 3 channels. The U-Vit model has 5 layers, as shown in the image, the patch size is 8*8, and the width is 64. The buffer size is 10240, and the model is trained every 1024 steps. The epsilon parameter for the randomness linearly decreases from 1 to 0.1 in the first 2000 training steps and linearly decreases from 0.1 to 0.01 in the next 2000 training steps. One training step means 1024 steps, and the model is trained once. </p>
 
-<h3>Setup</h3>
-<p>aaaaa</p>
 
-<h3>Results</h3>
-<p>aaaaa</p>
+<h2>Results</h2>
+<p>Here is a video showing the result:</p>
 <video width="600" height="400" controls>
-    <source src="file/result_compressed.mp4" type="video/mp4">
+    <source src="resource/result_compressed.mp4" type="video/mp4">
 </video>
 
 <h2>Discussion</h2>
-<p>aaaaa</p>
+<p>In the experiment, the model successfully nearned the game rule and follow the </p>
 
 <h2>Conclusion and Future Work</h2>
 <p>aaaaa</p>
@@ -53,6 +88,11 @@ One of the main problems of the DQN algorithm is that it is hard to converge, an
     	<span>[2]</span>
     	<span>Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr Bojanowski, Pascal Vincent, Michael Rabbat, Yann LeCun, and Nicolas Ballas, "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture," <i>arXiv preprint arXiv:2301.08243</i>, 2023.</span>
 	</div>
+
+	<div id="ref-bao2023worth">
+		<span>[3]</span>
+		<span>Fan Bao, Shen Nie, Kaiwen Xue, Yue Cao, Chongxuan Li, Hang Su, and Jun Zhu, "All are Worth Words: A ViT Backbone for Diffusion Models," <i>arXiv preprint arXiv:2209.12152</i>, 2023.</span>
+	</div>
 </p>
 
 <script>
@@ -62,3 +102,5 @@ One of the main problems of the DQN algorithm is that it is hard to converge, an
         }
     };
 </script>
+
+</html>
