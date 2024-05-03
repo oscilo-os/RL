@@ -61,7 +61,7 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 
 
 <h2>Experiments</h2>
-<p>I trained the model on the CarRacing-V2 environment from OpenAI Gym in the experiment.  The model is in discrete mode, and the action space size is 5. The input state is a 96*96 image with 3 channels. The U-Vit model has 5 layers, as shown in the image, the patch size is 8*8, and the width is 64. The buffer size is 10240, and the model is trained every 1024 steps. The epsilon parameter for the randomness linearly decreases from 1 to 0.1 in the first 2000 training steps and linearly decreases from 0.1 to 0.01 in the next 2000 training steps. One training step means 1024 steps, and the model is trained once. </p>
+<p>I trained the model on the CarRacing-V2 environment from OpenAI Gym in the experiment.  The model is in discrete mode, and the action space size is 5. The input state is a 96*96 image with 3 channels. The U-Vit model has 5 layers, as shown in the image, the patch size is 8*8, and the width is 64. The buffer size is 10240, and the model is trained every 1024 steps. The epsilon parameter for the randomness linearly decreases from 1 to 0.1 in the first 2000 training steps and linearly decreases from 0.1 to 0.01 in the next 2000 training steps. One training step means 1024 steps, and the model is trained once. In each training step, the model is trained 3 epochs, and the gamma in DQN loss is 0.99.</p>
 
 
 <h2>Results</h2>
@@ -69,9 +69,13 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 <video width="600" height="400" controls>
     <source src="resource/result_compressed.mp4" type="video/mp4">
 </video>
+<div>
+	<img src="resource/download.png" alt="plot" width="30%">
+	<p>Image 4: The reward curve of the whole training process.</p>
+</div>
 
 <h2>Discussion</h2>
-<p>In the experiment, the model successfully learned the game rule and followed the track in validation. In my test, the convergence is hard without using the hyperparameters mentioned in the paper. Using batch sizes like 32, the model may be unable to learn the environment. The memory parameter also helps the model avoid sticking in the spinning. With memory, the model can avoid being stuck in the spinning, and the learning curve is smoother and more stable.  </p>
+<p>In the experiment, the model successfully learned the game rule and followed the track in validation. In my test, the convergence is hard without using the hyperparameters mentioned in the paper. Using batch sizes like 32, the model may be unable to learn the environment. The memory parameter also helps the model avoid sticking in the spinning. With memory, the model can avoid being stuck in the spinning, and the learning curve is smoother and more stable. In my testing, when using other hyperparameters, it is hard to observe continuous loss decrease during 3 epochs of each training step. The research on JEPA model provides a simple way to set the hyperparameters in DQN. </p>
 
 <h2>Conclusion and Future Work</h2>
 <p></p>
