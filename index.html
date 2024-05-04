@@ -57,7 +57,7 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 <p>Using a moving average to update the target network started from the teacher-student self-supervised model. Using the moving average can be smoother than updating the target network every N step, and convergence speed can be faster. </p>
 	
 <h4>Hyperparameter</h4>
-<p>The model uses the hyperparameters from the JEPA model. The batch size is 2048, and the optimizer is AdamW. The learning rate is 10^-4, and the weight decay is 0.04. The target network is updated using EMA with a momentum of 0.996. All these parameters are from the JEPA model. The idea is that to stabilize the learning process, the model needs a large batch size and weight decay. </p>
+<p>The model uses the hyperparameters from the JEPA model. The batch size is 2048, and the optimizer is AdamW. The learning rate is 10^-4, and the weight decay is 0.04. The target network is updated using EMA with a momentum of 0.996. All these parameters are from the JEPA model. The idea is that to stabilize the learning process, the model needs a large batch size and weight decay. These hyperparameters can help to stablize the training process of the network. In comparison, the network is not learnable when using common hypermeters like batch size 32, learning rate 10^-5, and updating the target network every 10 training steps. </p>
 
 
 <h2>Experiments</h2>
@@ -73,6 +73,8 @@ I use the U-ViT model as the network architecture to predict the Q values.<a hre
 	<img src="resource/download.png" alt="plot" width="30%">
 	<p>Image 4: The reward curve of the whole training process.</p>
 </div>
+<p>The video shows the result of the training, which showed that the car could successfully follow the track at a relatively high speed. The image shows the average reward per step during the training process. The y-axis is the average reward per environment step, while the reward is from the OpenAI Gym environment. The x-axis is the number of training steps, which means 1024 steps in the environment, and the network is trained in 3 epochs. </p>
+
 
 <h2>Discussion</h2>
 <p>In the experiment, the model successfully learned the game rule and followed the track in validation. In my test, the convergence is hard without using the hyperparameters mentioned in the paper. Using batch sizes like 32, the model may be unable to learn the environment. The memory parameter also helps the model avoid sticking in the spinning. With memory, the model can avoid being stuck in the spinning, and the learning curve is smoother and more stable. In my testing, when using other hyperparameters, it is hard to observe continuous loss decrease during 3 epochs of each training step. The research on the JEPA model provides a simple way to set the hyperparameters in DQN. </p>
